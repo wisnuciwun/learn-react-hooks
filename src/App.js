@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
 
@@ -49,8 +49,33 @@ function App() {
     })
   }
 
+  const [result, setResult] = useState('Users')
+  const [item, setItem] = useState([])
+  const [windowWidth, setWindow] = useState(window.innerWidth)
+
+  useEffect(() => {
+    // fetch(`https://jsonplaceholder.typicode.com/${result}`)
+    //   .then(response => response.json())
+    //   .then(result => setItem(result))
+
+  }, [result])
+
+  const handleResize = () => {
+    setWindow(window.innerWidth)
+  } // --> its not gonna work if you place setWindow directly in useEffect without array function
+
+  useEffect(() => {
+    // window.addEventListener('resize', setWindow(window.innerWidth)) --> its not work
+    // window.addEventListener('resize', () => setWindow(window.innerWidth)) -- its work
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    } // --> unmount method
+  }, [])
+
   return (
     <div className="App">
+      USE STATE TESTING
       {/* <header className="App-header">
         <button onClick={increment}>+</button>
         {input}
@@ -60,6 +85,17 @@ function App() {
         <button onClick={increment}>+</button>
         {count} - {color}
         <button onClick={decrementObj}>-</button>
+      </header>
+      USE EFFECT TESTING
+      <header className="App-header">
+        {/* <button onClick={() => setResult('Users')} >Users</button>
+        <button onClick={() => setResult('Comments')} >Comments</button>
+        <button onClick={() => setResult('Posts')} >Posts</button>
+        <p>{result}</p>
+        {item.map(val => {
+          return <pre>{JSON.stringify(val)}</pre>
+        })} */}
+        {windowWidth}
       </header>
     </div>
   );
